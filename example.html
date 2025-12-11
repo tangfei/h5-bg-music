@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背景音乐示例</title>
+    <script src="./bg-music.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .instructions {
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        .btn-danger {
+            background: #f44336;
+        }
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+        .btn-info {
+            background: #2196F3;
+        }
+        .btn-info:hover {
+            background: #1976D2;
+        }
+        .code-block {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>背景音乐播放示例</h1>
+        
+        <div class="instructions">
+            <p><strong>说明：</strong>此页面演示了如何在普通HTML页面中使用背景音乐播放功能。</p>
+            <p>在移动设备上打开此页面，背景音乐应该会自动播放（特别是在微信浏览器中）。</p>
+        </div>
+        
+        <div>
+            <button class="btn" onclick="playMusic()">播放音乐</button>
+            <button class="btn btn-danger" onclick="pauseMusic()">暂停音乐</button>
+            <button class="btn btn-info" onclick="checkStatus()">检查状态</button>
+            <button class="btn btn-danger" onclick="destroyMusic()">销毁音乐</button>
+        </div>
+        
+        <div class="code-block">
+            // 使用示例<br><br>
+            // 初始化背景音乐<br>
+            const bgMusic = BgMusic.init({<br>
+            &nbsp;&nbsp;src: 'http://music.163.com/song/media/outer/url?id=1814767154.mp3',<br>
+            &nbsp;&nbsp;loop: 999,<br>
+            &nbsp;&nbsp;controls: true,<br>
+            &nbsp;&nbsp;customStyle: {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;right: '20px'<br>
+            &nbsp;&nbsp;}<br>
+            });<br><br>
+            
+            // 播放音乐<br>
+            bgMusic.play();<br><br>
+            
+            // 暂停音乐<br>
+            bgMusic.pause();<br><br>
+            
+            // 获取播放状态<br>
+            const state = bgMusic.getState(); // 'play' 或 'pause'<br><br>
+            
+            // 销毁音乐实例<br>
+            bgMusic.destroy();
+        </div>
+        
+        <h2>注意事项</h2>
+        <ul>
+            <li>音频文件必须可以通过HTTPS访问且没有跨域问题</li>
+            <li>在某些浏览器中，首次播放可能需要用户交互（点击等）</li>
+            <li>建议使用短链接音频文件，以提高加载速度</li>
+            <li>在生产环境中，请使用自己的音频文件CDN</li>
+        </ul>
+    </div>
+
+    <script>
+        // 初始化背景音乐
+        let bgMusic = null;
+        
+        window.onload = function() {
+            // 替换为实际可用的音频链接
+            bgMusic = BgMusic.init({
+                src: 'http://music.163.com/song/media/outer/url?id=1814767154.mp3', // 请替换为有效的音频链接
+                loop: 999,
+                controls: true
+            });
+            
+            // 如果是在微信浏览器中，可以尝试自动播放
+            if (/MicroMessenger/i.test(navigator.userAgent)) {
+                // 注意：在微信环境中，最好结合微信JS-SDK使用
+                console.log('当前在微信浏览器中');
+            }
+        };
+        
+        function playMusic() {
+            if (bgMusic) {
+                bgMusic.play()
+                    .then(() => {
+                        console.log('音乐开始播放');
+                    })
+                    .catch((error) => {
+                        console.error('播放失败:', error);
+                        alert('播放失败，请检查音频链接是否有效且可访问');
+                    });
+            } else {
+                alert('音乐实例未初始化');
+            }
+        }
+        
+        function pauseMusic() {
+            if (bgMusic) {
+                bgMusic.pause();
+                console.log('音乐已暂停');
+            } else {
+                alert('音乐实例未初始化');
+            }
+        }
+        
+        function checkStatus() {
+            if (bgMusic) {
+                const state = bgMusic.getState();
+                alert('当前音乐状态: ' + state);
+                console.log('当前音乐状态:', state);
+            } else {
+                alert('音乐实例未初始化');
+            }
+        }
+        
+        function destroyMusic() {
+            if (bgMusic) {
+                bgMusic.destroy();
+                bgMusic = null;
+                console.log('音乐实例已销毁');
+                alert('音乐实例已销毁');
+            } else {
+                alert('音乐实例未初始化');
+            }
+        }
+    </script>
+</body>
+</html>
