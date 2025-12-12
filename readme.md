@@ -167,6 +167,3 @@ useBgMusic 参数说明：
 
 - **src**：音乐地址
 - **loop**：循环次数
-- **controls**：是否显示控制按钮（在普通HTML版本中无效）
-- **customIcon**：自定义图标（在普通HTML版本中无效）
-- **customStyle**：自定义悬浮图标样式（在普通HTML版本中无效）
